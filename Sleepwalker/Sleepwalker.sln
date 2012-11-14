@@ -3,6 +3,10 @@ Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual C# Express 2010
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sleepwalker", "Sleepwalker.csproj", "{762804DE-C6B0-4E97-A8F6-150FEF36F467}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SleepwalkerContent", "..\SleepwalkerContent\SleepwalkerContent.contentproj", "{43F0D24C-D141-433D-96E7-DFC422D231E4}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SleepwalkerEngine", "SleepwalkerEngine\SleepwalkerEngine.csproj", "{6DB77BF7-31F8-4036-8496-7875CDB4780C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x86 = Debug|x86
@@ -13,6 +17,12 @@ Global
 		{762804DE-C6B0-4E97-A8F6-150FEF36F467}.Debug|x86.Build.0 = Debug|x86
 		{762804DE-C6B0-4E97-A8F6-150FEF36F467}.Release|x86.ActiveCfg = Release|x86
 		{762804DE-C6B0-4E97-A8F6-150FEF36F467}.Release|x86.Build.0 = Release|x86
+		{43F0D24C-D141-433D-96E7-DFC422D231E4}.Debug|x86.ActiveCfg = Debug|x86
+		{43F0D24C-D141-433D-96E7-DFC422D231E4}.Release|x86.ActiveCfg = Release|x86
+		{6DB77BF7-31F8-4036-8496-7875CDB4780C}.Debug|x86.ActiveCfg = Debug|x86
+		{6DB77BF7-31F8-4036-8496-7875CDB4780C}.Debug|x86.Build.0 = Debug|x86
+		{6DB77BF7-31F8-4036-8496-7875CDB4780C}.Release|x86.ActiveCfg = Release|x86
+		{6DB77BF7-31F8-4036-8496-7875CDB4780C}.Release|x86.Build.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

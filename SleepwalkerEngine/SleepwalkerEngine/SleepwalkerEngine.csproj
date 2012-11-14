@@ -1,20 +1,20 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
-    <ProjectGuid>{762804DE-C6B0-4E97-A8F6-150FEF36F467}</ProjectGuid>
+    <ProjectGuid>{8F3A2C15-2793-4F92-85B5-4F4A7A252EB4}</ProjectGuid>
     <ProjectTypeGuids>{6D335F3A-9D43-41b4-9D22-F6F17C4BE596};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
     <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Sleepwalker</RootNamespace>
-    <AssemblyName>Sleepwalker</AssemblyName>
+    <RootNamespace>SleepwalkerEngine</RootNamespace>
+    <AssemblyName>SleepwalkerEngine</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <TargetFrameworkProfile>Client</TargetFrameworkProfile>
     <XnaFrameworkVersion>v4.0</XnaFrameworkVersion>
     <XnaPlatform>Windows</XnaPlatform>
     <XnaProfile>HiDef</XnaProfile>
-    <XnaCrossPlatformGroupID>c93730b6-4ded-459e-807c-94bf90715bb1</XnaCrossPlatformGroupID>
+    <XnaCrossPlatformGroupID>0ca254b6-53b6-42fb-acd4-e084f7f41b38</XnaCrossPlatformGroupID>
     <XnaOutputType>Game</XnaOutputType>
     <ApplicationIcon>Game.ico</ApplicationIcon>
     <Thumbnail>GameThumbnail.png</Thumbnail>
@@ -116,13 +116,9 @@
     <Content Include="GameThumbnail.png" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\SleepwalkerContent\SleepwalkerContent.contentproj">
-      <Name>SleepwalkerContent</Name>
+    <ProjectReference Include="..\SleepwalkerEngineContent\SleepwalkerEngineContent.contentproj">
+      <Name>SleepwalkerEngineContent</Name>
       <XnaReferenceType>Content</XnaReferenceType>
-    </ProjectReference>
-    <ProjectReference Include="SleepwalkerEngine\SleepwalkerEngine.csproj">
-      <Project>{6DB77BF7-31F8-4036-8496-7875CDB4780C}</Project>
-      <Name>SleepwalkerEngine</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

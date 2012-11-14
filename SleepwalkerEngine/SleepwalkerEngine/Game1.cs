@@ -1,8 +1,15 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Audio;
+using Microsoft.Xna.Framework.Content;
+using Microsoft.Xna.Framework.GamerServices;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using Microsoft.Xna.Framework.Media;
 
-namespace Sleepwalker
+namespace SleepwalkerEngine
 {
     /// <summary>
     /// This is the main type for your game
@@ -11,9 +18,6 @@ namespace Sleepwalker
     {
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
-
-        SceneManager sceneManager;
-        Renderer renderer;
 
         public Game1()
         {
@@ -29,28 +33,7 @@ namespace Sleepwalker
         /// </summary>
         protected override void Initialize()
         {
-            // Create a new SpriteBatch, which can be used to draw textures.
-            spriteBatch = new SpriteBatch(GraphicsDevice);
-
-            sceneManager = new SceneManager();
-            renderer = new Renderer(spriteBatch);
-
-            SceneNode sn1 = new SceneNode()
-            {
-                Name = "Flag1",
-                Position = new Vector2(300, 300),
-                Sprite = Content.Load<Texture2D>("flag")
-            };
-
-            SceneNode sn2 = new SceneNode()
-            {
-                Name = "Flag2",
-                Position = new Vector2(200, 300),
-                Sprite = Content.Load<Texture2D>("flag")
-            };
-
-            sceneManager.Add(sn1);
-            sceneManager.Add(sn2);
+            // TODO: Add your initialization logic here
 
             base.Initialize();
         }
@@ -61,6 +44,9 @@ namespace Sleepwalker
         /// </summary>
         protected override void LoadContent()
         {
+            // Create a new SpriteBatch, which can be used to draw textures.
+            spriteBatch = new SpriteBatch(GraphicsDevice);
+
             // TODO: use this.Content to load your game content here
         }
 
@@ -97,19 +83,7 @@ namespace Sleepwalker
         {
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
-            renderer.Start();
-
-            foreach (var sn in sceneManager.GetAllNodes())
-            {
-                renderer.DrawSprite(sn);
-            }
-
-            /*foreach (var sn in sceneManager.GetNodeByName("Flag1"))
-            {
-                renderer.DrawSprite(sn);
-            }*/
-
-            renderer.End();
+            // TODO: Add your drawing code here
 
             base.Draw(gameTime);
         }
