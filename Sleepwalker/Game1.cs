@@ -1,6 +1,7 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using SleepwalkerEngine;
 
 namespace Sleepwalker
 {
@@ -12,8 +13,9 @@ namespace Sleepwalker
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
 
-        SceneManager sceneManager;
+        SceneManager world;
         Renderer renderer;
+        InputManager inputManager;
 
         public Game1()
         {
@@ -32,7 +34,7 @@ namespace Sleepwalker
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
-            sceneManager = new SceneManager();
+            world = new SceneManager();
             renderer = new Renderer(spriteBatch);
 
             SceneNode sn1 = new SceneNode()
@@ -49,8 +51,14 @@ namespace Sleepwalker
                 Sprite = Content.Load<Texture2D>("flag")
             };
 
-            sceneManager.Add(sn1);
-            sceneManager.Add(sn2);
+            world.Add(sn1);
+            world.Add(sn2);
+
+            inputManager = new InputManager();
+
+            inputManager.AddKeyBinding("Exit Game");
+            inputManager["Exit Game"].Add(Keys.Escape);
+            inputManager["Exit Game"].Add(MouseButton.Right);
 
             base.Initialize();
         }
@@ -81,10 +89,11 @@ namespace Sleepwalker
         protected override void Update(GameTime gameTime)
         {
             // Allows the game to exit
-            if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed)
+            if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed ||
+                inputManager["Exit Game"].WasPressed)
                 this.Exit();
 
-            // TODO: Add your update logic here
+            inputManager.Update();
 
             base.Update(gameTime);
         }
@@ -99,7 +108,7 @@ namespace Sleepwalker
 
             renderer.Start();
 
-            foreach (var sn in sceneManager.GetAllNodes())
+            foreach (var sn in world.GetAllNodes())
             {
                 renderer.DrawSprite(sn);
             }

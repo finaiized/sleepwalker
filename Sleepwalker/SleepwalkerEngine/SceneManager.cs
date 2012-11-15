@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 
-namespace Sleepwalker
+namespace SleepwalkerEngine
 {
     /// <summary>
     /// The manager of all scene nodes.

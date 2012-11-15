@@ -1,7 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
-namespace Sleepwalker
+namespace SleepwalkerEngine
 {
     /// <summary>
     /// A node in the scene.

@@ -1,7 +1,7 @@
 ﻿using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework;
 
-namespace Sleepwalker
+namespace SleepwalkerEngine
 {
     /// <summary>
     /// A renderer that draws graphics to the scene.
