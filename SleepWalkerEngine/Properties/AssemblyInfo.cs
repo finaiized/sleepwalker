@@ -5,8 +5,8 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("SleepwalkerEngine")]
-[assembly: AssemblyProduct("SleepwalkerEngine")]
+[assembly: AssemblyTitle("SleepWalkerEngine")]
+[assembly: AssemblyProduct("SleepWalkerEngine")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyCompany("")]
 [assembly: AssemblyCopyright("Copyright ©  2012")]
@@ -22,7 +22,7 @@ using System.Runtime.InteropServices;
 // On Windows, the following GUID is for the ID of the typelib if this
 // project is exposed to COM. On other platforms, it unique identifies the
 // title storage container when deploying this assembly to the device.
-[assembly: Guid("a8eb12c2-022c-4d9d-83de-f69e39badd99")]
+[assembly: Guid("b25f70c8-6831-4a02-b976-c8dcda64505c")]
 
 // Version information for an assembly consists of the following four values:
 //

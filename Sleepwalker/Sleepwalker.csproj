@@ -117,12 +117,13 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SleepwalkerContent\SleepwalkerContent.contentproj">
-      <Name>SleepwalkerContent</Name>
+      <Name>SleepwalkerContent %28Content%29</Name>
       <XnaReferenceType>Content</XnaReferenceType>
+      <Project>{43F0D24C-D141-433D-96E7-DFC422D231E4}</Project>
     </ProjectReference>
-    <ProjectReference Include="SleepwalkerEngine\SleepwalkerEngine.csproj">
-      <Project>{6DB77BF7-31F8-4036-8496-7875CDB4780C}</Project>
-      <Name>SleepwalkerEngine</Name>
+    <ProjectReference Include="..\SleepWalkerEngine\SleepWalkerEngine.csproj">
+      <Project>{96DCFFD7-3FA3-407B-AFC1-DEA5012381CC}</Project>
+      <Name>SleepWalkerEngine</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
