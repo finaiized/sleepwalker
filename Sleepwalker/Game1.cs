@@ -2,6 +2,8 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using SleepwalkerEngine;
+using System;
+using System.Diagnostics;
 
 namespace Sleepwalker
 {
@@ -16,6 +18,11 @@ namespace Sleepwalker
         SceneManager world;
         Renderer renderer;
         InputManager inputManager;
+
+        SceneNode sn1;
+        SceneNode sn2;
+        int snV;
+        int snVY;
 
         public Game1()
         {
@@ -37,19 +44,22 @@ namespace Sleepwalker
             world = new SceneManager();
             renderer = new Renderer(spriteBatch);
 
-            SceneNode sn1 = new SceneNode()
+            sn1 = new SceneNode()
             {
                 Name = "Flag1",
                 Position = new Vector2(300, 300),
                 Sprite = Content.Load<Texture2D>("flag")
             };
 
-            SceneNode sn2 = new SceneNode()
+            sn2 = new SceneNode()
             {
                 Name = "Flag2",
                 Position = new Vector2(200, 300),
                 Sprite = Content.Load<Texture2D>("flag")
             };
+
+            snV = 0;
+            snVY = 0;
 
             world.Add(sn1);
             world.Add(sn2);
@@ -59,6 +69,18 @@ namespace Sleepwalker
             inputManager.AddKeyBinding("Exit Game");
             inputManager["Exit Game"].Add(Keys.Escape);
             inputManager["Exit Game"].Add(MouseButton.Right);
+
+            inputManager.AddKeyBinding("Move Left");
+            inputManager["Move Left"].Add(Keys.Left);
+
+            inputManager.AddKeyBinding("Move Right");
+            inputManager["Move Right"].Add(Keys.Right);
+
+            inputManager.AddKeyBinding("Move Up");
+            inputManager["Move Up"].Add(Keys.Up);
+
+            inputManager.AddKeyBinding("Move Down");
+            inputManager["Move Down"].Add(Keys.Down);
 
             base.Initialize();
         }
@@ -92,12 +114,85 @@ namespace Sleepwalker
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed ||
                 inputManager["Exit Game"].WasPressed)
                 this.Exit();
+            snV = 0;
+            snVY = 0;
+            if (inputManager["Move Left"].IsDown)
+            {
+                snV = -2;
+            }
+            else if (inputManager["Move Right"].IsDown)
+            {
+                snV = 2;
+            }
+
+            if (inputManager["Move Up"].IsDown)
+            {
+                snVY = -2;
+            }
+            else if (inputManager["Move Down"].IsDown)
+            {
+                snVY = 2;
+            }
+
+            sn1.Position += new Vector2(snV, snVY);
+
+            Vector2 accum = Vector2.Zero;
+            // if there is a collision
+            if (sn1.Rectangle.Intersects(sn2.Rectangle))
+            {
+                Rectangle xTest = new Rectangle(sn1.Rectangle.X, sn1.Rectangle.Y, sn1.Rectangle.Width, sn1.Rectangle.Height);
+                Rectangle yTest = new Rectangle(sn1.Rectangle.X, sn1.Rectangle.Y, sn1.Rectangle.Width, sn1.Rectangle.Height);
+                //check x
+                if (Math.Abs(snV) > 0)
+                {
+                    // while it is still intersecting
+                    while (xTest.Intersects(sn2.Rectangle))
+                    {
+                        // move it away 1 at a time until it doesn't touch
+                        xTest.X -= Math.Sign(snV);
+
+                        // accumulate total x movement needed
+                        accum.X -= Math.Sign(snV);
+                    }
+
+                }
+                //check y
+                if (Math.Abs(snVY) > 0)
+                {
+                    while (yTest.Intersects(sn2.Rectangle))
+                    {
+                        yTest.Y -= Math.Sign(snVY);
+                        accum.Y -= Math.Sign(snVY);
+                    }
+                }
+            }
+
+
+            // if it intersects both x and y
+            if (accum.X != 0 && accum.Y != 0)
+            {
+                // which is larger?
+                if (Math.Abs(accum.X) > Math.Abs(accum.Y))
+                {
+                    // move to the smaller one (Y in this case)
+                    sn1.Position += new Vector2(0, accum.Y);
+                }
+                else
+                {
+                    // move to the smaller one (X in this case)
+                    sn1.Position += new Vector2(accum.X, 0);
+                }
+            }
+            else
+            {
+                // if just one axis, just move
+                sn1.Position += new Vector2(accum.X, accum.Y);
+            }
 
             inputManager.Update();
 
             base.Update(gameTime);
         }
-
         /// <summary>
         /// This is called when the game should draw itself.
         /// </summary>

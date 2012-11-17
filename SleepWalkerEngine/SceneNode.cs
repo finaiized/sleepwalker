@@ -27,11 +27,25 @@ namespace SleepwalkerEngine
         /// The name of the scene node. It need not be unique.
         /// </summary>
         public string Name { get; set; }
-        
+
         /// <summary>
         /// The texture representing the scene node.
         /// </summary>
         public Texture2D Sprite { get; set; }
+
+        private Rectangle rectangle;
+
+        public Rectangle Rectangle
+        {
+            get
+            {
+                return new Rectangle((int)Position.X, (int)Position.Y, Sprite.Width, Sprite.Height);
+            }
+            set
+            {
+                rectangle = value;
+            }
+        }
 
         public SceneNode()
         {
