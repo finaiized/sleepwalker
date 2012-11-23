@@ -4,6 +4,7 @@ using Microsoft.Xna.Framework.Input;
 using SleepwalkerEngine;
 using System;
 using System.Diagnostics;
+using System.Collections.Generic;
 
 namespace Sleepwalker
 {
@@ -18,12 +19,12 @@ namespace Sleepwalker
         SceneManager world;
         Renderer renderer;
         InputManager inputManager;
+        CollisionResolver cr;
 
         SceneNode sn1;
         SceneNode sn2;
-        int snV;
-        int snVY;
-
+        Vector2 prevPos;
+        List<SceneNode> sns;
         public Game1()
         {
             graphics = new GraphicsDeviceManager(this);
@@ -58,11 +59,52 @@ namespace Sleepwalker
                 Sprite = Content.Load<Texture2D>("flag")
             };
 
-            snV = 0;
-            snVY = 0;
+            SceneNode sn3 = new SceneNode()
+            {
+                Name = "Flag3",
+                Position = new Vector2(232, 300),
+                Sprite = Content.Load<Texture2D>("flag")
+            };
+
+
+            SceneNode sn4 = new SceneNode()
+            {
+                Name = "Flag4",
+                Position = new Vector2(232, 332),
+                Sprite = Content.Load<Texture2D>("flag")
+            };
 
             world.Add(sn1);
             world.Add(sn2);
+            world.Add(sn3);
+            world.Add(sn4);
+
+            for (int i = 0; i < 10; i++)
+            {
+                world.Add(new SceneNode
+                {
+                    Name = "Flag4",
+                    Position = new Vector2(232 + i * 32, 332),
+                    Sprite = Content.Load<Texture2D>("flag")
+                });
+            }
+
+            for (int i = 0; i < 10; i++)
+            {
+                world.Add(new SceneNode
+                {
+                    Name = "FlagY" + i.ToString(),
+                    Position = new Vector2(232 + 320, 332 - i * 32),
+                    Sprite = Content.Load<Texture2D>("flag")
+                });
+            }
+
+            prevPos = sn1.Position;
+            cr = new CollisionResolver();
+            sns = new List<SceneNode>(world.GetAllNodes());
+            sns.Remove(sn1);
+
+            cr.Colliders = sns;
 
             inputManager = new InputManager();
 
@@ -114,85 +156,40 @@ namespace Sleepwalker
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed ||
                 inputManager["Exit Game"].WasPressed)
                 this.Exit();
-            snV = 0;
-            snVY = 0;
+            Vector2 velocity = Vector2.Zero;
             if (inputManager["Move Left"].IsDown)
             {
-                snV = -2;
+                velocity.X = -2;
             }
             else if (inputManager["Move Right"].IsDown)
             {
-                snV = 2;
+                velocity.X = 2;
             }
 
             if (inputManager["Move Up"].IsDown)
             {
-                snVY = -2;
+                velocity.Y = -2;
             }
             else if (inputManager["Move Down"].IsDown)
             {
-                snVY = 2;
+                velocity.Y = 2;
             }
 
-            sn1.Position += new Vector2(snV, snVY);
+            sn1.Position += velocity;
 
-            Vector2 accum = Vector2.Zero;
-            // if there is a collision
-            if (sn1.Rectangle.Intersects(sn2.Rectangle))
+            foreach (var sn in cr.Colliders)
             {
-                Rectangle xTest = new Rectangle(sn1.Rectangle.X, sn1.Rectangle.Y, sn1.Rectangle.Width, sn1.Rectangle.Height);
-                Rectangle yTest = new Rectangle(sn1.Rectangle.X, sn1.Rectangle.Y, sn1.Rectangle.Width, sn1.Rectangle.Height);
-                //check x
-                if (Math.Abs(snV) > 0)
-                {
-                    // while it is still intersecting
-                    while (xTest.Intersects(sn2.Rectangle))
-                    {
-                        // move it away 1 at a time until it doesn't touch
-                        xTest.X -= Math.Sign(snV);
-
-                        // accumulate total x movement needed
-                        accum.X -= Math.Sign(snV);
-                    }
-
-                }
-                //check y
-                if (Math.Abs(snVY) > 0)
-                {
-                    while (yTest.Intersects(sn2.Rectangle))
-                    {
-                        yTest.Y -= Math.Sign(snVY);
-                        accum.Y -= Math.Sign(snVY);
-                    }
-                }
+                sn1.Position += cr.ResolveCollisions(velocity, sn1, sn);
             }
 
-
-            // if it intersects both x and y
-            if (accum.X != 0 && accum.Y != 0)
-            {
-                // which is larger?
-                if (Math.Abs(accum.X) > Math.Abs(accum.Y))
-                {
-                    // move to the smaller one (Y in this case)
-                    sn1.Position += new Vector2(0, accum.Y);
-                }
-                else
-                {
-                    // move to the smaller one (X in this case)
-                    sn1.Position += new Vector2(accum.X, 0);
-                }
-            }
-            else
-            {
-                // if just one axis, just move
-                sn1.Position += new Vector2(accum.X, accum.Y);
-            }
+            // Fixes 'caught in seams' bug when pressing up and left but only moving left
+            cr.Colliders.Reverse();
 
             inputManager.Update();
 
             base.Update(gameTime);
         }
+
         /// <summary>
         /// This is called when the game should draw itself.
         /// </summary>

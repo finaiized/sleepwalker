@@ -121,9 +121,9 @@
       <XnaReferenceType>Content</XnaReferenceType>
       <Project>{43F0D24C-D141-433D-96E7-DFC422D231E4}</Project>
     </ProjectReference>
-    <ProjectReference Include="..\SleepWalkerEngine\SleepWalkerEngine.csproj">
+    <ProjectReference Include="..\SleepWalkerEngine\SleepwalkerEngine.csproj">
       <Project>{96DCFFD7-3FA3-407B-AFC1-DEA5012381CC}</Project>
-      <Name>SleepWalkerEngine</Name>
+      <Name>SleepwalkerEngine</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

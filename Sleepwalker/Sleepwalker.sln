@@ -5,7 +5,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sleepwalker", "Sleepwalker.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SleepwalkerContent", "..\SleepwalkerContent\SleepwalkerContent.contentproj", "{43F0D24C-D141-433D-96E7-DFC422D231E4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SleepWalkerEngine", "..\SleepWalkerEngine\SleepWalkerEngine.csproj", "{96DCFFD7-3FA3-407B-AFC1-DEA5012381CC}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SleepwalkerEngine", "..\SleepWalkerEngine\SleepwalkerEngine.csproj", "{96DCFFD7-3FA3-407B-AFC1-DEA5012381CC}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
