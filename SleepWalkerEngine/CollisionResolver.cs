@@ -11,19 +11,19 @@ namespace SleepwalkerEngine
     {
         public List<SceneNode> Colliders = new List<SceneNode>();
 
-        public Vector2 ResolveCollisions(Vector2 velocity, SceneNode sn1, SceneNode sn2)
+        public Vector2 ResolveCollisions(Vector2 velocity, Rectangle sn1, Rectangle sn2)
         {
 
             Vector2 xyPenetrationDepth = Vector2.Zero;
             // if there is a collision
-            if (sn1.Rectangle.Intersects(sn2.Rectangle))
+            if (sn1.Intersects(sn2))
             {
-                Rectangle testRect = sn1.Rectangle;
+                Rectangle testRect = sn1;
                 //check x
                 if (Math.Abs(velocity.X) > 0)
                 {
                     // while it is still intersecting
-                    while (testRect.Intersects(sn2.Rectangle))
+                    while (testRect.Intersects(sn2))
                     {
                         // move it away 1 at a time until it doesn't touch
                         testRect.X -= Math.Sign(velocity.X);
@@ -37,8 +37,8 @@ namespace SleepwalkerEngine
                 //check y
                 if (Math.Abs(velocity.Y) > 0)
                 {
-                    testRect = sn1.Rectangle;
-                    while (testRect.Intersects(sn2.Rectangle))
+                    testRect = sn1;
+                    while (testRect.Intersects(sn2))
                     {
                         testRect.Y -= Math.Sign(velocity.Y);
                         xyPenetrationDepth.Y -= Math.Sign(velocity.Y);

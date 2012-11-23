@@ -97,6 +97,7 @@
     <Compile Include="KeyBindings.cs" />
     <Compile Include="MouseButton.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Quadtree.cs" />
     <Compile Include="Renderer.cs" />
     <Compile Include="SceneManager.cs" />
     <Compile Include="SceneNode.cs" />

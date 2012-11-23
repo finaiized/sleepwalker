@@ -20,11 +20,16 @@ namespace Sleepwalker
         Renderer renderer;
         InputManager inputManager;
         CollisionResolver cr;
+        Quadtree quadTree;
 
         SceneNode sn1;
         SceneNode sn2;
         Vector2 prevPos;
         List<SceneNode> sns;
+
+        List<Rectangle> debugDraw;
+        Texture2D rectangleTexture;
+
         public Game1()
         {
             graphics = new GraphicsDeviceManager(this);
@@ -108,6 +113,9 @@ namespace Sleepwalker
 
             inputManager = new InputManager();
 
+            quadTree = new Quadtree(0, new Rectangle(0, 0,
+                GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height));
+
             inputManager.AddKeyBinding("Exit Game");
             inputManager["Exit Game"].Add(Keys.Escape);
             inputManager["Exit Game"].Add(MouseButton.Right);
@@ -123,6 +131,9 @@ namespace Sleepwalker
 
             inputManager.AddKeyBinding("Move Down");
             inputManager["Move Down"].Add(Keys.Down);
+
+            rectangleTexture = new Texture2D(GraphicsDevice, 1, 1);
+            rectangleTexture.SetData(new Color[] { Color.White });
 
             base.Initialize();
         }
@@ -156,6 +167,9 @@ namespace Sleepwalker
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed ||
                 inputManager["Exit Game"].WasPressed)
                 this.Exit();
+
+            quadTree.Clear();
+
             Vector2 velocity = Vector2.Zero;
             if (inputManager["Move Left"].IsDown)
             {
@@ -177,10 +191,30 @@ namespace Sleepwalker
 
             sn1.Position += velocity;
 
+            for (int i = 0; i < cr.Colliders.Count; i++)
+            {
+                quadTree.Insert(cr.Colliders[i].Rectangle);
+            }
+
+            List<Rectangle> returnObjects = new List<Rectangle>();
+            debugDraw = new List<Rectangle>();
+            for (int i = 0; i < ((List<SceneNode>)world.GetAllNodes()).Count; i++)
+            {
+                returnObjects.Clear();
+                quadTree.Retrieve(ref returnObjects, sn1.Rectangle);
+
+                Debug.WriteLine("Checking collisions with " + returnObjects.Count);
+                for (int j = 0; j < returnObjects.Count; j++)
+                {
+                    sn1.Position += cr.ResolveCollisions(velocity, sn1.Rectangle, returnObjects[j]);
+                    debugDraw.Add(returnObjects[j]);
+                }
+            }
+            /*
             foreach (var sn in cr.Colliders)
             {
-                sn1.Position += cr.ResolveCollisions(velocity, sn1, sn);
-            }
+                sn1.Position += cr.ResolveCollisions(velocity, sn1.Rectangle, sn.Rectangle);
+            }*/
 
             // Fixes 'caught in seams' bug when pressing up and left but only moving left
             cr.Colliders.Reverse();
@@ -210,6 +244,10 @@ namespace Sleepwalker
                 renderer.DrawSprite(sn);
             }*/
 
+            foreach (var rec in debugDraw)
+            {
+                spriteBatch.Draw(rectangleTexture, rec, Color.White);
+            }
             renderer.End();
 
             base.Draw(gameTime);
