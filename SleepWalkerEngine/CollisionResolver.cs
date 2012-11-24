@@ -1,15 +1,21 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using Microsoft.Xna.Framework;
-using System.Diagnostics;
 
 namespace SleepwalkerEngine
 {
     public class CollisionResolver
     {
-        public List<SceneNode> Colliders = new List<SceneNode>();
+        public List<SceneNode> Colliders;
+
+        /// <summary>
+        /// Initialize the collision resolver
+        /// </summary>
+        /// <param name="colliders">The list of objects in the scene, excluding the main object.</param>
+        public CollisionResolver(List<SceneNode> colliders)
+        {
+            Colliders = colliders;
+        }
 
         public Vector2 ResolveCollisions(Vector2 velocity, Rectangle sn1, Rectangle sn2)
         {

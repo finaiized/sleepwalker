@@ -2,8 +2,6 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using SleepwalkerEngine;
-using System;
-using System.Diagnostics;
 using System.Collections.Generic;
 
 namespace Sleepwalker
@@ -23,13 +21,7 @@ namespace Sleepwalker
         Quadtree quadTree;
         Camera2D camera;
 
-        SceneNode sn1;
-        SceneNode sn2;
-        Vector2 prevPos;
-        List<SceneNode> sns;
-
-        List<Rectangle> debugDraw;
-        Texture2D rectangleTexture;
+        Player player;
 
         public Game1()
         {
@@ -51,14 +43,14 @@ namespace Sleepwalker
             world = new SceneManager();
             renderer = new Renderer(spriteBatch);
 
-            sn1 = new SceneNode()
+            player = new Player()
             {
                 Name = "Flag1",
                 Position = new Vector2(300, 300),
                 Sprite = Content.Load<Texture2D>("flag")
             };
 
-            sn2 = new SceneNode()
+            SceneNode sn2 = new SceneNode()
             {
                 Name = "Flag2",
                 Position = new Vector2(200, 300),
@@ -80,7 +72,7 @@ namespace Sleepwalker
                 Sprite = Content.Load<Texture2D>("flag")
             };
 
-            world.Add(sn1);
+            world.Add(player);
             world.Add(sn2);
             world.Add(sn3);
             world.Add(sn4);
@@ -105,12 +97,10 @@ namespace Sleepwalker
                 });
             }
 
-            prevPos = sn1.Position;
-            cr = new CollisionResolver();
-            sns = new List<SceneNode>(world.GetAllNodes());
-            sns.Remove(sn1);
+            List<SceneNode> sns = new List<SceneNode>(world.GetAllNodes());
+            sns.Remove(player);
 
-            cr.Colliders = sns;
+            cr = new CollisionResolver(sns);
 
             inputManager = new InputManager();
 
@@ -132,9 +122,6 @@ namespace Sleepwalker
 
             inputManager.AddKeyBinding("Move Down");
             inputManager["Move Down"].Add(Keys.Down);
-
-            rectangleTexture = new Texture2D(GraphicsDevice, 1, 1);
-            rectangleTexture.SetData(new Color[] { Color.White });
 
             camera = new Camera2D(GraphicsDevice.Viewport);
 
@@ -171,45 +158,39 @@ namespace Sleepwalker
                 inputManager["Exit Game"].WasPressed)
                 this.Exit();
 
-            quadTree.Clear();
 
-            Vector2 velocity = Vector2.Zero;
+            player.Velocity.X = 0;
             if (inputManager["Move Left"].IsDown)
             {
-                velocity.X = -2;
+                player.Velocity.X = -player.MoveSpeed;
             }
             else if (inputManager["Move Right"].IsDown)
             {
-                velocity.X = 2;
+                player.Velocity.X = player.MoveSpeed;
             }
 
-            if (inputManager["Move Up"].IsDown)
+            if (inputManager["Move Up"].WasPressed)
             {
-                velocity.Y = -2;
-            }
-            else if (inputManager["Move Down"].IsDown)
-            {
-                velocity.Y = 2;
+                player.Velocity.Y = -player.MoveSpeed * 10;
             }
 
-            sn1.Position += velocity;
+            player.Position += player.Velocity;
 
+            quadTree.Clear();
             for (int i = 0; i < cr.Colliders.Count; i++)
             {
                 quadTree.Insert(cr.Colliders[i].Rectangle);
             }
 
-            List<Rectangle> returnObjects = new List<Rectangle>();
-            debugDraw = new List<Rectangle>();
+            List<Rectangle> nodesToCheck = new List<Rectangle>();
             for (int i = 0; i < ((List<SceneNode>)world.GetAllNodes()).Count; i++)
             {
-                returnObjects.Clear();
-                quadTree.Retrieve(ref returnObjects, sn1.Rectangle);
+                nodesToCheck.Clear();
+                quadTree.Retrieve(ref nodesToCheck, player.Rectangle);
 
-                for (int j = 0; j < returnObjects.Count; j++)
+                for (int j = 0; j < nodesToCheck.Count; j++)
                 {
-                    sn1.Position += cr.ResolveCollisions(velocity, sn1.Rectangle, returnObjects[j]);
-                    debugDraw.Add(returnObjects[j]);
+                    player.Position += cr.ResolveCollisions(player.Velocity, player.Rectangle, nodesToCheck[j]);
                 }
             }
 
@@ -217,8 +198,8 @@ namespace Sleepwalker
             cr.Colliders.Reverse();
 
             inputManager.Update();
-            camera.Update(gameTime, new Vector2(sn1.Rectangle.X + (sn1.Rectangle.Width / 2), 
-                sn1.Rectangle.Y + (sn1.Rectangle.Height / 2)));
+            camera.Update(gameTime, new Vector2(player.Rectangle.X + (player.Rectangle.Width / 2),
+                player.Rectangle.Y + (player.Rectangle.Height / 2)));
 
             base.Update(gameTime);
         }
@@ -235,13 +216,16 @@ namespace Sleepwalker
 
             foreach (var sn in world.GetAllNodes())
             {
-                renderer.DrawSprite(sn);
+                // Quick check to determine if the node is within the screen at all
+                if (!(sn.Rectangle.X + sn.Rectangle.Width < player.Rectangle.X - GraphicsDevice.Viewport.Width / 2 ||
+                    sn.Rectangle.X > player.Rectangle.X + GraphicsDevice.Viewport.Width / 2 ||
+                    sn.Rectangle.Y > player.Rectangle.Y + GraphicsDevice.Viewport.Width / 2 ||
+                    sn.Rectangle.Y + sn.Rectangle.Height < player.Rectangle.Y - GraphicsDevice.Viewport.Width / 2))
+                {
+                    renderer.DrawSprite(sn);
+                }
             }
 
-            foreach (var rec in debugDraw)
-            {
-                spriteBatch.Draw(rectangleTexture, rec, Color.White);
-            }
             renderer.End();
 
             base.Draw(gameTime);
