@@ -29,9 +29,10 @@ namespace SleepwalkerEngine
         /// 
         /// Reset settings or prepare batches here.
         /// </summary>
-        public void Start()
+        public void Start(Camera2D camera)
         {
-            spriteBatch.Begin();
+            spriteBatch.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend,
+                null, null, null, null, camera.Transform);
         }
 
         /// <summary>

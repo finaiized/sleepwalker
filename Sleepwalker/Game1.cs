@@ -21,6 +21,7 @@ namespace Sleepwalker
         InputManager inputManager;
         CollisionResolver cr;
         Quadtree quadTree;
+        Camera2D camera;
 
         SceneNode sn1;
         SceneNode sn2;
@@ -135,6 +136,8 @@ namespace Sleepwalker
             rectangleTexture = new Texture2D(GraphicsDevice, 1, 1);
             rectangleTexture.SetData(new Color[] { Color.White });
 
+            camera = new Camera2D(GraphicsDevice.Viewport);
+
             base.Initialize();
         }
 
@@ -203,23 +206,19 @@ namespace Sleepwalker
                 returnObjects.Clear();
                 quadTree.Retrieve(ref returnObjects, sn1.Rectangle);
 
-                Debug.WriteLine("Checking collisions with " + returnObjects.Count);
                 for (int j = 0; j < returnObjects.Count; j++)
                 {
                     sn1.Position += cr.ResolveCollisions(velocity, sn1.Rectangle, returnObjects[j]);
                     debugDraw.Add(returnObjects[j]);
                 }
             }
-            /*
-            foreach (var sn in cr.Colliders)
-            {
-                sn1.Position += cr.ResolveCollisions(velocity, sn1.Rectangle, sn.Rectangle);
-            }*/
 
             // Fixes 'caught in seams' bug when pressing up and left but only moving left
             cr.Colliders.Reverse();
 
             inputManager.Update();
+            camera.Update(gameTime, new Vector2(sn1.Rectangle.X + (sn1.Rectangle.Width / 2), 
+                sn1.Rectangle.Y + (sn1.Rectangle.Height / 2)));
 
             base.Update(gameTime);
         }
@@ -232,17 +231,12 @@ namespace Sleepwalker
         {
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
-            renderer.Start();
+            renderer.Start(camera);
 
             foreach (var sn in world.GetAllNodes())
             {
                 renderer.DrawSprite(sn);
             }
-
-            /*foreach (var sn in sceneManager.GetNodeByName("Flag1"))
-            {
-                renderer.DrawSprite(sn);
-            }*/
 
             foreach (var rec in debugDraw)
             {
