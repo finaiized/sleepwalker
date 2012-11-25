@@ -41,8 +41,8 @@ namespace SleepwalkerEngine
         /// <param name="sn">The scene node to draw</param>
         public void DrawSprite(SceneNode sn)
         {
-            spriteBatch.Draw(sn.Sprite, sn.Position, null, Color.White, sn.Rotation,
-                Vector2.Zero, sn.Scale, SpriteEffects.None, 0f);
+            spriteBatch.Draw(sn.Sprite, sn.Rectangle, null, Color.White, sn.Rotation, Vector2.Zero,
+                SpriteEffects.None, 0f);
         }
 
         /// <summary>

@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using SleepwalkerEngine;
 using System.Collections.Generic;
+using System;
 
 namespace Sleepwalker
 {
@@ -162,21 +163,28 @@ namespace Sleepwalker
             player.Velocity = Vector2.Zero;
             if (inputManager["Move Left"].IsDown)
             {
-                player.Velocity.X = -player.MoveSpeed;
+                player.Velocity.X = -player.MoveSpeed * gameTime.ElapsedGameTime.Milliseconds;
             }
             else if (inputManager["Move Right"].IsDown)
             {
-                player.Velocity.X = player.MoveSpeed;
+                player.Velocity.X = player.MoveSpeed * gameTime.ElapsedGameTime.Milliseconds;
             }
 
             if (inputManager["Move Up"].IsDown)
             {
-                player.Velocity.Y = -player.MoveSpeed;
+                player.Velocity.Y = -player.MoveSpeed * gameTime.ElapsedGameTime.Milliseconds;
             }
 
             if (inputManager["Move Down"].IsDown)
             {
-                player.Velocity.Y = player.MoveSpeed;
+                player.Velocity.Y = player.MoveSpeed * gameTime.ElapsedGameTime.Milliseconds;
+            }
+
+            if (player.Velocity.X != 0 && player.Velocity.Y != 0)
+            {
+                // Divide by sqrt(2)
+                player.Velocity.X /= 1.414f;
+                player.Velocity.Y /= 1.414f;
             }
             player.Position += player.Velocity;
 
