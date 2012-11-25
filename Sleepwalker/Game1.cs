@@ -159,7 +159,7 @@ namespace Sleepwalker
                 this.Exit();
 
 
-            player.Velocity.X = 0;
+            player.Velocity = Vector2.Zero;
             if (inputManager["Move Left"].IsDown)
             {
                 player.Velocity.X = -player.MoveSpeed;
@@ -169,11 +169,15 @@ namespace Sleepwalker
                 player.Velocity.X = player.MoveSpeed;
             }
 
-            if (inputManager["Move Up"].WasPressed)
+            if (inputManager["Move Up"].IsDown)
             {
-                player.Velocity.Y = -player.MoveSpeed * 10;
+                player.Velocity.Y = -player.MoveSpeed;
             }
 
+            if (inputManager["Move Down"].IsDown)
+            {
+                player.Velocity.Y = player.MoveSpeed;
+            }
             player.Position += player.Velocity;
 
             quadTree.Clear();
