@@ -4,6 +4,7 @@ using Microsoft.Xna.Framework.Input;
 using SleepwalkerEngine;
 using System.Collections.Generic;
 using System;
+using System.Diagnostics;
 
 namespace Sleepwalker
 {
@@ -78,11 +79,11 @@ namespace Sleepwalker
             world.Add(sn3);
             world.Add(sn4);
 
-            for (int i = 0; i < 10; i++)
+            for (int i = 0; i < 100; i++)
             {
                 world.Add(new SceneNode
                 {
-                    Name = "Flag4",
+                    Name = "FlagX",
                     Position = new Vector2(232 + i * 32, 332),
                     Sprite = Content.Load<Texture2D>("flag")
                 });
@@ -183,8 +184,8 @@ namespace Sleepwalker
             if (player.Velocity.X != 0 && player.Velocity.Y != 0)
             {
                 // Divide by sqrt(2)
-                player.Velocity.X /= 1.414f;
-                player.Velocity.Y /= 1.414f;
+                player.Velocity.X *= 0.7071f;
+                player.Velocity.Y *= 0.7071f;
             }
             player.Position += player.Velocity;
 
@@ -202,7 +203,8 @@ namespace Sleepwalker
 
                 for (int j = 0; j < nodesToCheck.Count; j++)
                 {
-                    player.Position += cr.ResolveCollisions(player.Velocity, player.Rectangle, nodesToCheck[j]);
+                    Vector2 minimumDisplacement = cr.ResolveCollisions(player.Velocity, player.Rectangle, nodesToCheck[j]);
+                    player.Position += minimumDisplacement;
                 }
             }
 
@@ -225,18 +227,20 @@ namespace Sleepwalker
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
             renderer.Start(camera);
-
+            int n = 0;
             foreach (var sn in world.GetAllNodes())
             {
                 // Quick check to determine if the node is within the screen at all
-                if (!(sn.Rectangle.X + sn.Rectangle.Width < player.Rectangle.X - GraphicsDevice.Viewport.Width / 2 ||
-                    sn.Rectangle.X > player.Rectangle.X + GraphicsDevice.Viewport.Width / 2 ||
-                    sn.Rectangle.Y > player.Rectangle.Y + GraphicsDevice.Viewport.Width / 2 ||
-                    sn.Rectangle.Y + sn.Rectangle.Height < player.Rectangle.Y - GraphicsDevice.Viewport.Width / 2))
+                if (!(sn.Rectangle.X + sn.Rectangle.Width < player.Rectangle.X - GraphicsDevice.Viewport.Width || // To the left
+                    sn.Rectangle.X > player.Rectangle.X + GraphicsDevice.Viewport.Width || // To the right
+                    sn.Rectangle.Y > player.Rectangle.Y + GraphicsDevice.Viewport.Height ||
+                    sn.Rectangle.Y + sn.Rectangle.Height < player.Rectangle.Y - GraphicsDevice.Viewport.Height))
                 {
+                    n++;
                     renderer.DrawSprite(sn);
                 }
             }
+            Debug.WriteLine("Drawed " + n);
 
             renderer.End();
 

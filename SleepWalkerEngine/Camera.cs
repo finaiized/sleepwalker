@@ -16,7 +16,7 @@ namespace SleepwalkerEngine
         /// <summary>
         /// The center that the camera should focus on.
         /// </summary>
-        Vector2 center;
+        public Vector2 center;
 
         /// <summary>
         /// The viewport containing the width and height of the screen.
@@ -32,6 +32,14 @@ namespace SleepwalkerEngine
         {
             center = centerV;
 
+            if (center.X < viewport.Width / 2)
+            {
+                center.X = viewport.Width / 2;
+            }
+            if (center.Y < viewport.Height / 2)
+            {
+                center.Y = viewport.Height / 2;
+            }
             // Translate the matrix to center, adding on a translation of the middle of the viewport
             Transform = Matrix.CreateTranslation(new Vector3(-center.X, -center.Y, 0)) *
                 Matrix.CreateTranslation(new Vector3(viewport.Width * 0.5f, viewport.Height * 0.5f, 0));
